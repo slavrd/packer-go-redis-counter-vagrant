@@ -1,0 +1,39 @@
+{
+  "variables": {
+    "build_name": "webcounter-vagrant",
+    "base_box": "slavrd/xenial64",
+    "skip_add": "true"
+  },
+  "builders": [
+    {
+        "name": "{{user `build_name`}}",
+        "communicator": "ssh",
+        "source_path": "{{user `base_box`}}",
+        "box_name": "{{user `base_box`}}",
+        "provider": "virtualbox",
+        "add_force": true,
+        "skip_add": "{{user `skip_add`}}",
+        "type": "vagrant"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "configs/webcounter.service",
+      "destination": "/tmp/webcounter.service",
+      "direction": "upload"
+    },
+    {
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash {{.Path}}",
+      "scripts": [
+        "scripts/webcounter_install.sh",
+        "scripts/webcounter_service_setup.sh",
+        "scripts/cleanup_final.sh"
+      ],
+      "environment_vars": [
+        "DEBIAN_FRONTEND=noninteractive"
+      ],
+      "type": "shell"
+    }
+  ]
+}
