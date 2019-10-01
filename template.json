@@ -1,7 +1,7 @@
 {
   "variables": {
     "build_name": "webcounter-vagrant",
-    "base_box": "slavrd/xenial64",
+    "base_box": "slavrd/bionic64",
     "skip_add": "true"
   },
   "builders": [
